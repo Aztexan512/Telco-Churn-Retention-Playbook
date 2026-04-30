@@ -2053,9 +2053,9 @@ def main():
         render_financial_impact(df_filtered, df_full, contract_sel, segment_sel,
                                 channel_sel, tenure_range, promo_sel)
     with tab5:
-        render_insurance_playbook()
-    with tab6:
         render_recommendations(df_filtered)
+    with tab6:
+        render_insurance_playbook()
 
 
 if __name__ == "__main__":
