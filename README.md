@@ -1,16 +1,100 @@
-# Telecom Customer Churn – Cross-Industry Retention Playbook for Insurance
+# Telecom Customer Churn — Cross-Industry Retention Playbook
 
-## Overview
+![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.35+-FF4B4B?logo=streamlit&logoColor=white)
+![Plotly](https://img.shields.io/badge/Plotly-5.x-3F4F75?logo=plotly&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-latest-F7931E?logo=scikit-learn&logoColor=white)
+![XGBoost](https://img.shields.io/badge/XGBoost-latest-189AB4?logo=xgboost&logoColor=white)
+![SHAP](https://img.shields.io/badge/SHAP-explainability-lightgrey)
+![License](https://img.shields.io/badge/License-MIT-2E7D32)
 
-This project builds a **telecom customer churn** model and then **translates the insights into an auto insurance context** (e.g., auto insurance). The goal is to show how a Senior/Lead Data Analyst can:
+---
 
-- Design a **realistic synthetic dataset** at scale  
-- Build and explain a **churn prediction model**  
-- Quantify **financial impact** of interventions  
-- **Generalize** learnings from telecom (subscription business) to **personal lines insurance** (policyholder retention)
+## Project Summary
 
-The core narrative:  
-> “The same behaviors that drive telecom churn (pricing changes, early service friction, payment habits, channel mix) also drive insurance retention. Here’s a concrete, data-backed framework that transfers across industries.”
+This project builds an end-to-end **telecom customer churn prediction system** and translates its findings into a retention framework applicable to **auto insurance**. It demonstrates how a Senior/Lead Data Analyst can own the full analytical lifecycle — from synthetic dataset design through ML modeling, SHAP explainability, and executive-ready financial impact quantification.
+
+The core narrative:
+> *"The same behaviors that drive telecom churn — pricing changes, early service friction, payment habits, channel mix — also drive insurance non-renewal. Here's a concrete, data-backed framework that transfers across industries."*
+
+**What's included:**
+- A 225,000-row synthetic dataset engineered to mirror real retention dynamics
+- XGBoost churn model with full SHAP explainability (AUC = 0.84)
+- Lift and decile analysis translating model performance into operational targeting efficiency
+- A $32.45M CLTV-at-risk simulation quantifying the ROI of a retention intervention program
+- A live Streamlit dashboard for interactive exploration
+
+---
+
+## Business Problem
+
+Customer churn is one of the highest-leverage problems in subscription and recurring-revenue businesses. The challenge is not identifying that churn happens — it's answering three operational questions:
+
+1. **Who** is most likely to churn, and how confident are we?
+2. **Why** are they churning — and which drivers are actionable?
+3. **What is the financial case** for investing in retention, and how do we size the program?
+
+This project addresses all three. In telecom, the annual cost of churn is measured in lost subscriber revenue. In personal lines insurance, the analogue is **premium non-renewal** — policyholders who don't renew at term, representing lost premium and the acquisition cost of replacement.
+
+The specific operational focus here is **early friction churn**: customers who leave because of an unresolved billing or technical issue in their first 60 days. This segment is:
+- **Identifiable in real-time** — the signal appears within 60 days of acquisition
+- **Preventable** — resolution rate, not issue occurrence, is the lever
+- **Directly translatable** to insurance (underwriting delays, first-payment failures, claims friction)
+
+---
+
+## Key Findings
+
+### Model Performance
+| Metric | Value |
+|---|---|
+| ROC AUC (20% holdout) | **0.84** |
+| Top decile lift | **1.84×** the average churn rate |
+| Recall at top 20% | **35.2%** of all churners captured |
+
+Targeting the highest-risk 20% of customers captures more than a third of all future churners — **1.76× better than random outreach**.
+
+### Top Churn Drivers — SHAP Feature Importance
+| Rank | Feature | Business Interpretation |
+|---|---|---|
+| 1 | `contract_type_month_to_month` | Dominant driver — no lock-in means high flight risk |
+| 2 | `is_autopay` | Manual payers churn at ~2× the rate of autopay customers |
+| 3 | `internet_service_fiber` | Fiber markets are competitive; customers have more alternatives |
+| 4 | `is_on_promo` | Promo customers are price-sensitive; they leave when discounts end |
+| 5 | `tenure_months` | Short-tenure customers carry the highest risk (first 12 months) |
+| 6 | `first_60d_tech_call` | Early friction signal — unresolved tech issues predict churn |
+| 7 | `first_60d_billing_call` | Early friction signal — unresolved billing issues predict churn |
+
+### Financial Impact — Friction Churn Segment
+| Metric | Value |
+|---|---|
+| Friction-driven churners | **19,147** customers (16.7% of total churn) |
+| Average 24-month CLTV | **~$1,695** per customer |
+| Total CLTV at risk | **$32.45 million** |
+| CLTV retained at 20% save rate | **$6.49 million** |
+
+---
+
+## Technical Stack
+
+| Layer | Technology |
+|---|---|
+| Language | Python 3.11 |
+| Dashboard | Streamlit 1.35+, Plotly 5.x |
+| Modeling | XGBoost, scikit-learn (Pipeline, train/test split, metrics) |
+| Explainability | SHAP (TreeExplainer, beeswarm, global importance) |
+| Data | pandas, NumPy |
+| Visualization | Matplotlib, Seaborn |
+
+**Install dependencies:**
+```bash
+pip install -r requirements.txt
+```
+
+**Run the dashboard:**
+```bash
+streamlit run app.py
+```
 
 ---
 
@@ -19,14 +103,14 @@ The core narrative:
 ```text
 telecommunications-churn-analysis/
 ├── data/
-│   ├── telco_churn_225k_v120.csv          # Synthetic dataset — run script 01 to generate (gitignored)
+│   ├── telco_churn_225k_v120.csv          # Synthetic dataset — run notebook 01 to generate (gitignored)
 │   └── data_dictionary.md                 # Column-level documentation
 ├── notebooks/
-│   ├── 01_synthetic_data_generation.py    # Generate synthetic dataset
-│   ├── 02_eda_visualizations.py           # EDA + presentation-ready charts
-│   ├── 03_model_training_explainability.py# XGBoost + SHAP explainability
-│   ├── 04_modeling_and_lift_analysis.py   # Lift curve & decile analysis
-│   └── 05_financial_impact.py             # CLTV & “what-if” save-rate scenarios
+│   ├── 01_synthetic_data_generation.ipynb # Generate the 225k synthetic dataset
+│   ├── 02_eda_visualizations.ipynb        # EDA + presentation-ready charts
+│   ├── 03_model_training_explainability.ipynb  # XGBoost + SHAP explainability
+│   ├── 04_modeling_and_lift_analysis.ipynb     # Lift curve & decile analysis
+│   └── 05_financial_impact.ipynb          # CLTV & "what-if" save-rate scenarios
 ├── reports/
 │   ├── Model_ConfusionMatrix.png
 │   ├── Model_ROC_Curve.png
@@ -42,303 +126,96 @@ telecommunications-churn-analysis/
 ├── app.py                                 # Streamlit dashboard
 ├── requirements.txt
 └── README.md
+```
 
+---
 
-Synthetic Dataset Design
-File: data/telco_churn_225k_v120.csv
-Rows: 225,000 customers
-Target: churn (0 = retained, 1 = churned)
+## Synthetic Dataset Design
 
-The dataset is fully synthetic, but built to mimic real retention dynamics. Key design principles:
+**File:** `data/telco_churn_225k_v120.csv` · **Rows:** 225,000 · **Target:** `churn` (0 = retained, 1 = churned)
 
-Scale & realism
-225k customers to approximate a small slice of a large carrier base.
-Distributions tuned to produce realistic churn patterns by:
-Contract type (month-to-month vs term)
-Promo vs. full rate
-Service segment (internet-only, bundles, mobile, cable-only)
-Early friction events (first 60 days)
-Payment behavior (autopay vs manual)
-Leakage-aware feature design
-A small set of columns are intentionally excluded from ML features:
-churn_score: latent synthetic driver of the target (used only to generate churn).
-billing_risk_score: deterministic from payment/contract fields (dashboard only).
-cltv: synthetic 24‑month contribution margin used for financial impact.
-Transparent data contract
-dataset_metadata_v120.json documents:
-Version and generation timestamp
-Target definition
-Column-level notes (especially for derived/leakage-prone features)
-Key Columns
-Core Demographics & Tenure
-customer_id: synthetic ID (e.g., 0000123-TEL)
-gender: male / female
-senior_citizen: 0 / 1
-partner: yes / no
-dependents: yes / no
-tenure_months: 1–72 months
-Contract & Billing
-contract_type: month_to_month, one_year, two_year
-paperless_billing: yes / no
-payment_method:
-electronic_check, mailed_check,
-bank_transfer_auto, credit_card_auto
-is_autopay: 1 if on automatic payment, else 0
-Service Segments & Internet
-service_segment:
-internet_only
-internet_plus_other
-cable_only
-mobile
-internet_service: fiber, dsl, or no
-(cable-only has no; other segments require internet)
-phone_service, multiple_lines
-Add-ons & Support
-online_security, online_backup, device_protection, tech_support
-streaming_tv, streaming_movies
-Promo, Channel & Early Friction
-is_on_promo: 1 on discounted promo, 0 otherwise
-promo_discount_pct: magnitude of discount if on promo
-sales_channel:
-online, store, agent_call_center, third_party_retailer
-first_60d_billing_call: 1 if billing call in first 60 days
-billing_call_resolved: Int64 (<NA>, 0 = unresolved, 1 = resolved)
-first_60d_tech_call: 1 if tech support call in first 60 days
-tech_issue_resolved: Int64 (<NA>, 0 = unresolved, 1 = resolved)
-Pricing & Revenue
-monthly_charges: base monthly price (before promo)
-monthly_charges_billed: actual billed amount (after promo, if active)
-total_charges: piecewise calculation:
-If on promo:
-Promo rate for first 12 months, then full price thereafter
-Else:
-Full price across tenure
-Financial/Scoring Columns (Non-ML Features)
-estimated_margin_pct: synthetic margin percentage
-cltv: monthly_charges * 24 * estimated_margin_pct
-(approx. 24‑month contribution margin)
-billing_risk_score: deterministic score from is_autopay, paperless_billing, and contract_type
-churn_score: latent synthetic churn driver (not used as a feature)
-churn: target (0/1)
-Scripts
-1. 01_synthetic_data_generation.py
-Purpose:
-Generate the synthetic telecom churn dataset and a JSON metadata file.
+The dataset is fully synthetic, built to mimic real retention dynamics. Key design principles:
 
-Key Steps:
+**Scale & realism** — 225k customers approximate a meaningful slice of a large carrier's subscriber base. Churn distributions are tuned by contract type, promo status, service segment, early friction events, and payment behavior.
 
-Set global configuration:
-N_CUSTOMERS, random seed, version
-Simulate demographics, contract types, service segments, and channels
-Enforce business logic:
-Cable-only customers do not have internet
-Non–cable-only segments always have internet (fiber or DSL)
-Autopay is derived from payment method
-Construct pricing:
-Base internet pricing + add-ons + small noise
-Promo discount applied to monthly_charges_billed
-total_charges computed via promo-first, then full rate logic
-Compute synthetic scores:
-billing_risk_score (deterministic, dashboard-only)
-cltv (for financial impact)
-churn_score and churn_prob via a logistic transform
-Sample the binary target churn from churn_prob
-Save:
-telco_churn_225k_v120.csv
-dataset_metadata_v120.json
-How to run:
+**Leakage-aware feature design** — three columns are intentionally excluded from ML features:
+- `churn_score` — latent synthetic driver of the target variable
+- `billing_risk_score` — deterministic from payment/contract fields (dashboard use only)
+- `cltv` — 24-month contribution margin (financial impact use only)
 
-bash
-Copy
-python notebooks/01_synthetic_data_generation.py
-2. 02_eda_visualizations.py
-Purpose:
-Produce presentation-ready EDA figures using a consistent color palette (steel blue 900 / 500, white background, green for positive, red for negative).
+### Key Column Groups
 
-Outputs (saved in reports/):
-
-Presentation_Fig1_Drivers.png
-Churn by contract type, internet service, and sales channel
-Presentation_Fig2_Pricing.png
-Churn by promo vs full rate
-Churn by promo discount tier
-Presentation_Fig3_Friction.png
-Churn for customers with billing issues (resolved vs unresolved)
-Churn for customers with tech issues (resolved vs unresolved)
-Presentation_Fig4_TenureRisk.png
-Churn by tenure bucket
-Churn by autopay vs manual payment
-Presentation_Fig5_Correlation.png
-Correlation heatmap for key numeric drivers + churn
-Highlights:
-
-All plots use:
-White background
-Steel Blue 900 for main labels/titles
-Steel Blue 500 / Blues for secondary series
-Green for “good” (e.g., resolved issues, autopay)
-Red for “bad” (e.g., unresolved issues)
-Churn rates shown in percent, with labeled bars.
-How to run:
-
-bash
-Copy
-python notebooks/02_eda_visualizations.py
-3. 03_model_training_explainability.py
-Purpose:
-Train a churn prediction model and explain it in plain business terms.
-
-Approach:
-
-Train / test split
-XGBoost classifier
-Proper feature set that excludes:
-churn_score, billing_risk_score, cltv, and any obvious leakage fields
-Evaluate:
-ROC AUC, lift, and calibration
-Interpretability:
-Global feature importance (model-native)
-SHAP summary, beeswarm, and global importance plots
-This script powers the “modeling” section of the story:
-
-“Here’s how well we can predict churn before it happens, and here’s what the model says are the top drivers.”
-
-4. 05_financial_impact.py
-Purpose:
-Translate churn insights into dollars and headcount via a simple CLTV-based simulation.
-
-Key Logic:
-
-Define friction-driven churners:
-Customers who churned AND had an unresolved billing or tech issue in the first 60 days.
-Quantify:
-Number of friction churners
-Their share of total churn
-Total and average CLTV at risk
-Run a scenario simulation:
-For save rates from 5% to 50%, compute:
-Number of friction churners “saved”
-Total CLTV retained
-Highlight a 20% save rate scenario as a realistic program target and visualize it.
-Output:
-
-Console summary:
-Counts, shares, CLTV at risk, and interpretation
-Chart:
-Financial_Impact_CLTV_Simulation.png – bar chart of CLTV retained by save rate
-(20% bar highlighted in green as the target scenario)
-How to run:
-
-bash
-Copy
-python notebooks/05_financial_impact.py
-Telecom → Insurance Translation
-Although the dataset and scripts are telecom-flavored, many drivers map directly into insurance retention levers:
-
-Telecom Concept	Insurance Analogue
-Contract type (month-to-month vs term)	Policy term / renewal structure
-Promo discount & promo end	Intro rates vs. renewal price changes (“rate disruption”)
-Early billing/tech friction	Early claims/billing/underwriting friction
-Sales channel	Agent vs. direct vs. online aggregator
-Autopay & paperless billing	EFT, automatic renewal, e-delivery
-Streaming/add-on bundles	Multi-product bundling (auto + home + renters + toys)
-Tenure buckets	Policy age / tenure segments
-CLTV & save-rate simulation	Premium-at-risk & retention program ROI
-In a portfolio or interview, this becomes a discussion slide:
-
-“Here’s what drove churn in telecom, and here is how I’d operationalize that thinking in an auto insurance setting (e.g., Progressive).”
-
-## Results
-
-### Dataset
-- **225,000** synthetic customers · **~22–25%** overall churn rate
-- 35 features across demographics, contract, pricing, service, and friction signals
-
-### Model Performance — XGBoost (AUC = 0.84)
-| Metric | Value |
+| Group | Columns |
 |---|---|
-| ROC AUC (20% holdout) | **0.84** |
-| Top decile lift | **1.84×** the average churn rate |
-| Recall at top 20% | **35.2%** of all churners captured |
-
-An AUC of 0.84 means the model correctly ranks a churner above a retained customer 84% of the time (random = 0.50). Targeting the highest-risk 20% of customers with retention outreach captures more than a third of all future churners — 1.76× better than random.
-
-### Top Churn Drivers — SHAP Feature Importance
-| Rank | Feature | Interpretation |
-|---|---|---|
-| 1 | `contract_type_month_to_month` | Dominant driver — no lock-in means high flight risk |
-| 2 | `is_autopay` | Manual payers churn at ~2× the rate of autopay customers |
-| 3 | `internet_service_fiber` | Fiber markets are competitive; customers have alternatives |
-| 4 | `is_on_promo` | Promo customers are price-sensitive; they leave when discounts end |
-| 5 | `tenure_months` | Short-tenure customers are highest risk (first 12 months) |
-| 6 | `first_60d_tech_call` | Early friction signal — unresolved tech issues predict churn |
-| 7 | `first_60d_billing_call` | Early friction signal — unresolved billing issues predict churn |
+| Demographics & tenure | `gender`, `senior_citizen`, `partner`, `dependents`, `tenure_months` |
+| Contract & billing | `contract_type`, `paperless_billing`, `payment_method`, `is_autopay` |
+| Service & internet | `service_segment`, `internet_service`, `phone_service`, add-ons, streaming |
+| Promo & channel | `is_on_promo`, `promo_discount_pct`, `sales_channel` |
+| Early friction (60-day) | `first_60d_billing_call`, `billing_call_resolved`, `first_60d_tech_call`, `tech_issue_resolved` |
+| Pricing | `monthly_charges`, `monthly_charges_billed`, `total_charges` |
+| Financial / scoring (non-ML) | `cltv`, `billing_risk_score`, `churn_score` |
 
 ---
 
 ## Financial Impact & Business Case
 
-A predictive model is only as valuable as the revenue it protects. This phase translates the model's findings into a **24-month Contribution Margin (CLTV)** simulation to quantify the cost of "Service Friction" and the ROI of a retention program.
-
 ### The "Friction Churn" Segment
-By cross-referencing the model's top drivers with customer support data, we identified a high-risk segment: **Friction Churners**. These are customers who churned and had at least one **unresolved** billing or technical issue within their first 60 days.
+
+By cross-referencing the model's top drivers with support data, we identified **Friction Churners**: customers who churned and had at least one unresolved billing or tech issue within their first 60 days.
 
 - **Friction-Driven Churners:** 19,147 customers (16.7% of total churn)
-- **Average 24-Month CLTV per Customer:** ~$1,695
-- **Total Value at Risk:** **$32.45 Million**
+- **Average 24-Month CLTV:** ~$1,695 per customer
+- **Total CLTV at Risk:** $32.45 Million
 
 ### "What-If" Retention Simulation
-We simulated the financial upside of a "Rapid Resolution" task force designed to intervene and resolve these early friction points before the customer churns.
 
 | Program Save Rate | Customers Retained | 24-Month CLTV Retained |
-|-------------------|--------------------|------------------------|
-| 5% (Conservative) | 957                | $1.62 Million          |
-| 10% (Moderate)    | 1,914              | $3.24 Million          |
-| **20% (Target)**  | **3,829**          | **$6.49 Million**      |
-| 50% (Aggressive)  | 9,573              | $16.22 Million         |
+|---|---|---|
+| 5% (Conservative) | 957 | $1.62 Million |
+| 10% (Moderate) | 1,914 | $3.24 Million |
+| **20% (Target)** | **3,829** | **$6.49 Million** |
+| 50% (Aggressive) | 9,573 | $16.22 Million |
 
-**Strategic Takeaway for Insurance:**  
-By identifying the ~$6.5M upside of a 20% save rate in telecom, we create a blueprint for Progressive. We can apply this same logic to "Early Policy Friction" (e.g., underwriting delays or billing setup issues) to quantify the premium-at-risk and justify the headcount for specialized retention teams.
+---
 
+## Telecom → Insurance Translation
 
-Technical Stack
-Language: Python (3.x)
-Core Libraries:
-pandas, numpy
-matplotlib, seaborn
-Planned for Modeling:
-scikit-learn
-xgboost (or similar gradient boosting library)
-SHAP or similar explainability tools
-How to Reproduce
-Clone the repo or download this project.
-Create and activate a virtual environment (optional but recommended).
-Install dependencies:
-bash
-Copy
+| Telecom Concept | Insurance Analogue |
+|---|---|
+| Contract type (month-to-month vs term) | Policy term / renewal structure |
+| Promo discount & promo end | Intro rates vs. renewal price changes ("rate disruption") |
+| Early billing/tech friction | Early claims/billing/underwriting friction |
+| Sales channel | Agent vs. direct vs. online aggregator |
+| Autopay & paperless billing | EFT, automatic renewal, e-delivery |
+| Streaming/add-on bundles | Multi-product bundling (auto + home + renters) |
+| Tenure buckets | Policy age / tenure segments |
+| CLTV & save-rate simulation | Premium-at-risk & retention program ROI |
+
+---
+
+## How to Reproduce
+
+```bash
+# 1. Clone and install
+git clone https://github.com/Aztexan512/Telco-Churn-Retention-Playbook.git
+cd Telco-Churn-Retention-Playbook
 pip install -r requirements.txt
-Generate the dataset:
-bash
-Copy
-python notebooks/01_synthetic_data_generation.py
-Run EDA and export charts:
-bash
-Copy
-python notebooks/02_eda_visualizations.py
-Train model and run explainability (once 03_model_training_explainability.py is added).
-Run financial impact scenarios:
-bash
-Copy
-python notebooks/05_financial_impact.py
-Why This Project for a Senior/Lead Analyst Role
-This project is designed to showcase:
 
-End-to-end ownership: data design → modeling → financial impact → storytelling
-Cross-industry thinking: how to port a churn framework from telecom to insurance
-Strategic focus: early friction, pricing changes, channel performance, and payment behavior
-Executive-ready outputs: clean visuals, CLTV simulations, and clear translation to business levers
-It is intentionally modular, so it can be:
+# 2. Generate the synthetic dataset
+jupyter notebook notebooks/01_synthetic_data_generation.ipynb
 
-Walked through live in an interview
-Paired with a slide deck
-Extended into a more formal case study
+# 3. Run EDA
+jupyter notebook notebooks/02_eda_visualizations.ipynb
+
+# 4. Train model + SHAP explainability
+jupyter notebook notebooks/03_model_training_explainability.ipynb
+
+# 5. Lift & decile analysis
+jupyter notebook notebooks/04_modeling_and_lift_analysis.ipynb
+
+# 6. Financial impact simulation
+jupyter notebook notebooks/05_financial_impact.ipynb
+
+# 7. Launch the dashboard
+streamlit run app.py
+```
