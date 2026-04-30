@@ -348,7 +348,7 @@ p, li, td, th {{ color: {BLACK}; font-size: 14px; }}
 # ─────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    df = pd.read_csv("telco_churn_225k_v120.csv")
+    df = pd.read_csv("data/telco_churn_225k_v120.csv")
     df["billing_call_resolved"] = pd.to_numeric(df["billing_call_resolved"], errors="coerce")
     df["tech_issue_resolved"]   = pd.to_numeric(df["tech_issue_resolved"],   errors="coerce")
 
