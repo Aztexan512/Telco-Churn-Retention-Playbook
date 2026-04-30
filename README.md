@@ -248,6 +248,34 @@ In a portfolio or interview, this becomes a discussion slide:
 
 “Here’s what drove churn in telecom, and here is how I’d operationalize that thinking in an auto insurance setting (e.g., Progressive).”
 
+## Results
+
+### Dataset
+- **225,000** synthetic customers · **~22–25%** overall churn rate
+- 35 features across demographics, contract, pricing, service, and friction signals
+
+### Model Performance — XGBoost (AUC = 0.84)
+| Metric | Value |
+|---|---|
+| ROC AUC (20% holdout) | **0.84** |
+| Top decile lift | **1.84×** the average churn rate |
+| Recall at top 20% | **35.2%** of all churners captured |
+
+An AUC of 0.84 means the model correctly ranks a churner above a retained customer 84% of the time (random = 0.50). Targeting the highest-risk 20% of customers with retention outreach captures more than a third of all future churners — 1.76× better than random.
+
+### Top Churn Drivers — SHAP Feature Importance
+| Rank | Feature | Interpretation |
+|---|---|---|
+| 1 | `contract_type_month_to_month` | Dominant driver — no lock-in means high flight risk |
+| 2 | `is_autopay` | Manual payers churn at ~2× the rate of autopay customers |
+| 3 | `internet_service_fiber` | Fiber markets are competitive; customers have alternatives |
+| 4 | `is_on_promo` | Promo customers are price-sensitive; they leave when discounts end |
+| 5 | `tenure_months` | Short-tenure customers are highest risk (first 12 months) |
+| 6 | `first_60d_tech_call` | Early friction signal — unresolved tech issues predict churn |
+| 7 | `first_60d_billing_call` | Early friction signal — unresolved billing issues predict churn |
+
+---
+
 ## Financial Impact & Business Case
 
 A predictive model is only as valuable as the revenue it protects. This phase translates the model's findings into a **24-month Contribution Margin (CLTV)** simulation to quantify the cost of "Service Friction" and the ROI of a retention program.
