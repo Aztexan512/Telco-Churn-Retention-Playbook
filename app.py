@@ -2039,8 +2039,8 @@ def main():
         "Churn Drivers",
         "Model + Risk",
         "Financial Impact",
-        "Insurance Playbook",
         "Recommendations",
+        "Insurance Playbook",
     ])
 
     with tab1:
