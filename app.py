@@ -149,6 +149,9 @@ html, body, [data-testid="stAppViewContainer"],
     background-color: {BLUE_700} !important;
     color: {WHITE} !important;
 }}
+[data-baseweb="tag"] span {{
+    color: {WHITE} !important;
+}}
 
 /* Insight strip */
 .insight-strip {{
@@ -2065,5 +2068,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
