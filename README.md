@@ -10,6 +10,12 @@
 
 ---
 
+## Live Dashboard
+
+[Telecom Churn - Retention Dashboard]([https://your-app-url.streamlit.app](https://jba3qjyqv25gztqbzkgwxu.streamlit.app/)
+
+---
+
 ## Project Summary
 
 This project builds an end-to-end **telecom customer churn prediction system** and translates its findings into a retention framework applicable to **auto insurance**. It demonstrates how a Senior/Lead Data Analyst can own the full analytical lifecycle — from synthetic dataset design through ML modeling, SHAP explainability, and executive-ready financial impact quantification.
