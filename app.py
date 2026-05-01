@@ -563,7 +563,7 @@ def sparkline(values, color=BLUE_700, height=36):
 def render_sidebar(df):
     if st.session_state.get("_reset_filters"):
         del st.session_state["_reset_filters"]
-        for k in ["contract_sel", "segment_sel", "channel_sel", "tenure_range", "promo_sel"]:
+        for k in ["contract_sel", "segment_sel", "channel_sel", "tenure_range", "promo_sel", "date_month_range"]:
             if k in st.session_state:
                 del st.session_state[k]
         init_session_state(df)
@@ -2065,4 +2065,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
