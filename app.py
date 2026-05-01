@@ -400,12 +400,14 @@ def load_data():
 # SESSION STATE -- filter reset support
 # ─────────────────────────────────────────────
 def init_session_state(df):
+    _months = [f"{m:02d}/{y}" for y in range(2019, 2025) for m in range(1, 13)]
     defaults = {
-        "contract_sel": sorted(df["contract_type"].unique()),
-        "segment_sel":  sorted(df["service_segment"].unique()),
-        "channel_sel":  sorted(df["sales_channel"].unique()),
-        "tenure_range": (1, 72),
-        "promo_sel":    ["On Promo", "Full Rate"],
+        "contract_sel":    sorted(df["contract_type"].unique()),
+        "segment_sel":     sorted(df["service_segment"].unique()),
+        "channel_sel":     sorted(df["sales_channel"].unique()),
+        "tenure_range":    (1, 72),
+        "promo_sel":       ["On Promo", "Full Rate"],
+        "date_month_range": (_months[0], _months[-1]),
     }
     for k, v in defaults.items():
         if k not in st.session_state:
@@ -2068,6 +2070,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
