@@ -12,7 +12,7 @@
 
 ## Live Dashboard
 
-[Telecom Churn - Retention Dashboard]([https://your-app-url.streamlit.app](https://jba3qjyqv25gztqbzkgwxu.streamlit.app/)
+[Telecom Churn - Retention Dashboard](https://jba3qjyqv25gztqbzkgwxu.streamlit.app/)
 
 ---
 
