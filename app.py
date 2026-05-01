@@ -1,4 +1,4 @@
-"""
+﻿"""
 Telecom Churn -- Cross-Industry Retention Dashboard
 Author: Luciano Casillas
 Version: 4.0
@@ -561,6 +561,13 @@ def sparkline(values, color=BLUE_700, height=36):
 # SIDEBAR
 # ─────────────────────────────────────────────
 def render_sidebar(df):
+    if st.session_state.get("_reset_filters"):
+        del st.session_state["_reset_filters"]
+        for k in ["contract_sel", "segment_sel", "channel_sel", "tenure_range", "promo_sel"]:
+            if k in st.session_state:
+                del st.session_state[k]
+        init_session_state(df)
+
     st.sidebar.markdown(
         f"<div style='font-size:16px;font-weight:700;color:{NAVY};"
         f"margin-bottom:6px;'>Filters</div>"
@@ -682,9 +689,7 @@ def render_sidebar(df):
     st.sidebar.progress(min(pct / 100, 1.0))
 
     if st.sidebar.button("Reset All Filters", use_container_width=True):
-        defaults = init_session_state(df)
-        for k, v in defaults.items():
-            st.session_state[k] = v
+        st.session_state["_reset_filters"] = True
         st.rerun()
 
     return df_f, contract_sel, segment_sel, channel_sel, tenure_range, promo_sel
@@ -2060,3 +2065,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
